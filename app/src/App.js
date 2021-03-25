@@ -1,10 +1,10 @@
 import React from 'react';
-import '../styles/App.css';
+import './styles/app.scss';
 
 function App() {
   return (
     <div className="App">
-      WELCOME TO OUR NEW PWA: AthleteInForm !!!
+      AthleteInForm in Development in development
     </div>
   );
 }
