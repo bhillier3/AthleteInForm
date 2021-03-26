@@ -44,7 +44,7 @@ if (currentTask == 'build') {
   config.mode = 'production';
   config.module.rules[1].use[0] = MiniCssExtractPlugin.loader;
   config.plugins.push(
-    new MiniCssExtractPlugin({ filename: 'main.[fullhash].scss' }),
+    new MiniCssExtractPlugin({ filename: 'main.[fullhash].css' }),
     new CleanWebpackPlugin(),
     new WebpackManifestPlugin()
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/app.scss';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
 
@@ -187,35 +188,6 @@ const MyForm = () => {
         )}
       </Formik>
     </div>
-
-    // <form className="form">
-    //   <label htmlFor="name">Name:</label>
-    //   <input type="text" id="name" name="name" />
-    //   <label htmlFor="date">Date:</label>
-    //   <input type="text" id="date" name="date" /><br/>
-
-    //   <p>Pain Scale</p>
-    //   <input type="radio" name="pain" id="one" value="one"/>
-    //   <label htmlFor="one">1</label>
-    //   <input type="radio" name="pain" id="two" value="two"/>
-    //   <label htmlFor="two">2</label>
-    //   <input type="radio" name="pain" id="three" value="three"/>
-    //   <label htmlFor="three">3</label>
-    //   <input type="radio" name="pain" id="four" value="four"/>
-    //   <label htmlFor="four">4</label>
-    //   <input type="radio" name="pain" id="five" value="five"/>
-    //   <label htmlFor="five">5</label>
-    //   <input type="radio" name="pain" id="six" value="six"/>
-    //   <label htmlFor="six">6</label>
-    //   <input type="radio" name="pain" id="seven" value="seven"/>
-    //   <label htmlFor="seven">7</label>
-    //   <input type="radio" name="pain" id="eight" value="eight"/>
-    //   <label htmlFor="eight">8</label>
-    //   <input type="radio" name="pain" id="nine" value="nine"/>
-    //   <label htmlFor="nine">9</label>
-    //   <input type="radio" name="pain" id="ten" value="ten"/>
-    //   <label htmlFor="ten">10</label>
-    // </form>
   );
 };
 
