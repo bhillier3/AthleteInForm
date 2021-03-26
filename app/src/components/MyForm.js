@@ -20,7 +20,7 @@ const MyTextInput = ( { label, ...props } ) => {
 };
 
 const MyTextField = ( { label, ...props } ) => {
-  const [field, meta, ] = useField(props);
+  const [field, meta] = useField(props);
   // console.log(field)
   return (
     <>
@@ -36,36 +36,16 @@ const MyTextField = ( { label, ...props } ) => {
 }
 
 const MyRadioButton = ( { children, ...props } ) => {
-  const [field, meta] = useField({...props, type: 'radio'});
+  const [field] = useField({...props, type: 'radio'});
   return (
     <>
       <label className="radio-input">
         {children}
         <input type="radio" {...field} {...props} />
       </label>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
     </>
   );
 };
-
-///////////////////////////
-// Try to create a group for your radio buttons so that onError,
-// only one error message pops up, asking to require a selection,
-// rather than every radio button giving the error
-//
-//
-// const MyRadioGroup = ( { children, label, ...props } ) => {
-//   return (
-//     <>
-//       <h5 className="radio-group">{label}</h5>
-//       <div>{children}</div>
-//     </>
-//   );
-// }
-//
-///////////////////////////
 
 const MyCheckbox = ( { children, ...props } ) => {
   const [field, meta] = useField({...props, type: 'checkbox'});
@@ -82,11 +62,6 @@ const MyCheckbox = ( { children, ...props } ) => {
     </>
   );
 };
-
-const handleRequestClick = (props) => {
-  console.log(props);
-
-}
 
 const MyForm = () => {
   return (
@@ -127,7 +102,7 @@ const MyForm = () => {
           resetForm();
         }}
       >
-        {({ values, setFieldValue, handleChange }) => (
+        {({ values, setFieldValue, handleChange, errors }) => (
           <Form>
             <MyTextInput 
               label="Name:"
@@ -140,8 +115,9 @@ const MyForm = () => {
               type="date"
             />
 
-            <h5>Pain Scale</h5>
             <div className="radio-group">
+              <h5>Pain Scale</h5>
+              <div className="error">{errors.pain}</div>
               <MyRadioButton name="pain" value="one">1</MyRadioButton>
               <MyRadioButton name="pain" value="two">2</MyRadioButton>
               <MyRadioButton name="pain" value="three">3</MyRadioButton>
