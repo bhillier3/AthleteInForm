@@ -9,7 +9,7 @@ const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'build.[hash].js'
+    filename: 'build.[fullhash].js'
   },
   plugins: [
     new HTMLWebpackPlugin({ template: './public/index.html' })
@@ -17,7 +17,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
@@ -27,7 +27,7 @@ const config = {
         }
       },
       {
-        test: /\.scss$/,
+        test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader']
       },
     ]
@@ -44,7 +44,7 @@ if (currentTask == 'build') {
   config.mode = 'production';
   config.module.rules[1].use[0] = MiniCssExtractPlugin.loader;
   config.plugins.push(
-    new MiniCssExtractPlugin({ filename: 'main.[hash].scss' }),
+    new MiniCssExtractPlugin({ filename: 'main.[fullhash].scss' }),
     new CleanWebpackPlugin(),
     new WebpackManifestPlugin()
   );

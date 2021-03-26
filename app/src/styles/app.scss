@@ -1,5 +1,19 @@
-$primary-color: red;
+$primary-color: black;
+$secondary-color: blue;
+$error-color: red;
 
 div {
+  color: $primary-color;
+}
+
+h5 {
+  color: $secondary-color;
+}
+
+.error {
+  color: $error-color;
+}
+
+.form {
   color: $primary-color;
 }
