@@ -20,7 +20,8 @@ const MyTextInput = ( { label, ...props } ) => {
 };
 
 const MyTextField = ( { label, ...props } ) => {
-  const [field, meta] = useField(props);
+  const [field, meta, ] = useField(props);
+  // console.log(field)
   return (
     <>
       <h5>
@@ -82,6 +83,11 @@ const MyCheckbox = ( { children, ...props } ) => {
   );
 };
 
+const handleRequestClick = (props) => {
+  console.log(props);
+
+}
+
 const MyForm = () => {
   return (
     <div>
@@ -112,15 +118,16 @@ const MyForm = () => {
               then: Yup.string().required('Must include description of wanted treatment')
             })
         })}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting, resetForm }) => {
           setTimeout(() => {
             console.log(values);
             alert(JSON.stringify(values, null, 2));
             setSubmitting(false);
           }, 400);
+          resetForm();
         }}
       >
-        {({ values }) => (
+        {({ values, setFieldValue, handleChange }) => (
           <Form>
             <MyTextInput 
               label="Name:"
@@ -173,7 +180,10 @@ const MyForm = () => {
               placeholder="Description of soreness or possible injury..."
             />
 
-            <MyCheckbox name="treatment">Treatment Request?</MyCheckbox>
+            <MyCheckbox name="treatment" onChange={e => {
+              handleChange(e);
+              setFieldValue('request', '', true);
+            }}>Treatment Request?</MyCheckbox>
             {values.treatment ? (
               <MyTextField 
                 name="request"
@@ -181,9 +191,9 @@ const MyForm = () => {
                 rows="5"
                 placeholder="Description of treatment wanted..."
               />
-            ) : null}
+            ) : null }
 
-            <button type="submit">Submit</button>
+            <button type="submit" >Submit</button>
           </Form>
         )}
       </Formik>
