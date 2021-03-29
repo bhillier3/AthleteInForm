@@ -2,6 +2,9 @@ import React from 'react';
 import '../styles/app.scss';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
+import firebase from '../firebase.js';
+
+const db = firebase.firestore();
 
 const MyTextInput = ( { label, ...props } ) => {
   const [field, meta] = useField(props);
@@ -68,7 +71,8 @@ const MyForm = () => {
     <div>
       <Formik
         initialValues={{
-          name: '',
+          first: '',
+          last: '',
           date: '',
           pain: '',
           activity: [],
@@ -78,8 +82,11 @@ const MyForm = () => {
           request: ''
         }}
         validationSchema={Yup.object({
-          name: Yup.string()
-            .max(30, 'Must be 30 characters or less')
+          first: Yup.string()
+            .max(20, 'Must be 20 characters or less')
+            .required('Required'),
+          last: Yup.string()
+            .max(20, 'Must be 20 characters or less')
             .required('Required'),
           date: Yup.date()
             .max(new Date(), 'Date cannot be a future date')
@@ -94,19 +101,26 @@ const MyForm = () => {
             })
         })}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          setTimeout(() => {
-            console.log(values);
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+          // add data to firestore db
+          let info = { ...values };
+          info.pain = parseInt(info.pain);
+          // info.date = firebase.firestore.Timestamp.fromDate(new Date(info.date));
+          db.collection('users').doc(`${info.first} ${info.last}`).collection('forms').add(info);
+
+          setSubmitting(false);
           resetForm();
         }}
       >
         {({ values, setFieldValue, handleChange, errors }) => (
           <Form>
             <MyTextInput 
-              label="Name:"
-              name="name"
+              label="First Name:"
+              name="first"
+              type="text"
+            />
+            <MyTextInput 
+              label="Last Name:"
+              name="last"
               type="text"
             />
             <MyTextInput 
@@ -118,16 +132,16 @@ const MyForm = () => {
             <div className="radio-group">
               <h5>Pain Scale</h5>
               <div className="error">{errors.pain}</div>
-              <MyRadioButton name="pain" value="one">1</MyRadioButton>
-              <MyRadioButton name="pain" value="two">2</MyRadioButton>
-              <MyRadioButton name="pain" value="three">3</MyRadioButton>
-              <MyRadioButton name="pain" value="four">4</MyRadioButton>
-              <MyRadioButton name="pain" value="five">5</MyRadioButton>
-              <MyRadioButton name="pain" value="six">6</MyRadioButton>
-              <MyRadioButton name="pain" value="seven">7</MyRadioButton>
-              <MyRadioButton name="pain" value="eight">8</MyRadioButton>
-              <MyRadioButton name="pain" value="nine">9</MyRadioButton>
-              <MyRadioButton name="pain" value="ten">10</MyRadioButton>
+              <MyRadioButton name="pain" value="1">1</MyRadioButton>
+              <MyRadioButton name="pain" value="2">2</MyRadioButton>
+              <MyRadioButton name="pain" value="3">3</MyRadioButton>
+              <MyRadioButton name="pain" value="4">4</MyRadioButton>
+              <MyRadioButton name="pain" value="5">5</MyRadioButton>
+              <MyRadioButton name="pain" value="6">6</MyRadioButton>
+              <MyRadioButton name="pain" value="7">7</MyRadioButton>
+              <MyRadioButton name="pain" value="8">8</MyRadioButton>
+              <MyRadioButton name="pain" value="9">9</MyRadioButton>
+              <MyRadioButton name="pain" value="10">10</MyRadioButton>
             </div>
 
             <div className="checkbox-group">
