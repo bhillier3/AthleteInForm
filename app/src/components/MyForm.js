@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/app.scss';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
-import firebase from '../firebase.js';
+import firebase from '../firebase';
 
 const db = firebase.firestore();
 
@@ -66,6 +66,10 @@ const MyCheckbox = ( { children, ...props } ) => {
   );
 };
 
+const addForm = async(info) => {
+  await db.collection('users').doc(`${info.first} ${info.last}`).collection('forms').add(info);
+}
+
 const MyForm = () => {
   return (
     <div>
@@ -105,7 +109,7 @@ const MyForm = () => {
           let info = { ...values };
           info.pain = parseInt(info.pain);
           // info.date = firebase.firestore.Timestamp.fromDate(new Date(info.date));
-          db.collection('users').doc(`${info.first} ${info.last}`).collection('forms').add(info);
+          addForm(info);
 
           setSubmitting(false);
           resetForm();

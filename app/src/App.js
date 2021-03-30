@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import Home from './components/Home';
 import MyForm from './components/MyForm';
+import FormList from './components/FormList';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
             <MyForm />
           </Route>
           <Route path="/view-forms">
-            <h1>View Forms Page</h1>
+            <FormList />
           </Route>
           <Route path="/">
             <Home />
