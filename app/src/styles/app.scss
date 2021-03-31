@@ -17,3 +17,11 @@ h5 {
 .form {
   color: $primary-color;
 }
+
+.notify {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  font-size: 20px;
+  color: limegreen;
+}

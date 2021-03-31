@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import '../styles/app.scss';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
@@ -8,7 +8,6 @@ const db = firebase.firestore();
 
 const MyTextInput = ( { label, ...props } ) => {
   const [field, meta] = useField(props);
-  // console.log(field);
   return (
     <>
       <h5>
@@ -24,7 +23,6 @@ const MyTextInput = ( { label, ...props } ) => {
 
 const MyTextField = ( { label, ...props } ) => {
   const [field, meta] = useField(props);
-  // console.log(field)
   return (
     <>
       <h5>
@@ -52,7 +50,6 @@ const MyRadioButton = ( { children, ...props } ) => {
 
 const MyCheckbox = ( { children, ...props } ) => {
   const [field, meta] = useField({...props, type: 'checkbox'});
-  // props.value = children;
   return (
     <>
       <label className="checkbox-input">
@@ -67,10 +64,14 @@ const MyCheckbox = ( { children, ...props } ) => {
 };
 
 const addForm = async(info) => {
-  await db.collection('users').doc(`${info.first} ${info.last}`).collection('forms').add(info);
+  let userInfo = { name: info.name, email: "foo@bar.com" };
+  await db.collection('users').doc(info.name).set(userInfo);
+  await db.collection('users').doc(info.name).collection('forms').add(info);
 }
 
 const MyForm = () => {
+  const notifySumbit = useRef();
+
   return (
     <div>
       <Formik
@@ -105,14 +106,21 @@ const MyForm = () => {
             })
         })}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          // add data to firestore db
+          // add data to firestore databse
           let info = { ...values };
           info.pain = parseInt(info.pain);
+          // are fist and last still necessary if have name?
+          info.name = `${info.first} ${info.last}`;
           // info.date = firebase.firestore.Timestamp.fromDate(new Date(info.date));
           addForm(info);
 
-          setSubmitting(false);
-          resetForm();
+          // notify user of submission and reset form
+          notifySumbit.current.innerHTML = "Form Submitted!";
+          setTimeout(() => {
+            notifySumbit.current.innerHTML = "";
+            setSubmitting(false);
+            resetForm();
+          }, 1500);
         }}
       >
         {({ values, setFieldValue, handleChange, errors }) => (
@@ -188,6 +196,7 @@ const MyForm = () => {
             ) : null }
 
             <button type="submit" >Submit</button>
+            <h3 ref={notifySumbit} className="notify"></h3>
           </Form>
         )}
       </Formik>

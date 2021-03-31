@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import Home from './components/Home';
 import MyForm from './components/MyForm';
-import FormList from './components/FormList';
+import UserList from './components/UserList';
 
 function App() {
   return (
@@ -27,14 +27,14 @@ function App() {
         </ul>
 
         <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
           <Route path="/new-form">
             <MyForm />
           </Route>
           <Route path="/view-forms">
-            <FormList />
-          </Route>
-          <Route path="/">
-            <Home />
+            <UserList />
           </Route>
         </Switch>
       </div>

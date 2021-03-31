@@ -3,7 +3,8 @@ import {
   Switch,
   Link,
   Route,
-  useRouteMatch
+  useRouteMatch,
+  useParams
 } from 'react-router-dom';
 import ViewForm from './ViewForm';
 import firebase from '../firebase';
@@ -11,15 +12,19 @@ import firebase from '../firebase';
 const db = firebase.firestore();
 
 const FormList = () => {
-  let {url, path} = useRouteMatch();
-  let ref = db.collectionGroup('forms');
+  const {url, path} = useRouteMatch();
+  const { user } = useParams();
+  const ref = user === 'all' ?
+    db.collectionGroup('forms') :
+    db.collectionGroup('forms').where("name", "==", `${user}`);
 
   // States
-  const [formList, setFormList] = useState([]);
+  const [forms, setForms] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Extract forms from database
   useEffect(() => {
-    return ref.onSnapshot((querySnapshot) => {
+    ref.onSnapshot((querySnapshot) => {
       const list = [];
       querySnapshot.forEach(doc => {
         list.push({
@@ -27,7 +32,7 @@ const FormList = () => {
           ...doc.data()
         });
       });
-      setFormList(list);
+      setForms(list);
 
       if (loading) {
         setLoading(false);
@@ -36,26 +41,26 @@ const FormList = () => {
   }, []);
 
   if (loading) { 
-    console.log('loading')
-    return null; 
+    console.log('forms loading')
+    return <h3 className="loading">Forms are loading...</h3>; 
   }
 
   return(
     <div>
       <Switch>
-        <Route path={`${path}/form/:formId`}>
+        <Route path={`${path}/:formId`}>
           <ViewForm />
         </Route>
-        <Route path={path}>
+        <Route exact path={path}>
           <h3>Please select a form.</h3>
           <ul>
-            {formList.map(form =>
+            {forms.map(form =>
               <li key={form.id}>
                 <Link to ={{
-                  pathname: `${url}/form/${form.id}`,
+                  pathname: `${url}/${form.id}`,
                   state: { data: form }
                 }}
-              >Form {form.id}</Link>
+                >Form {form.id}</Link>
               </li>
             )}
           </ul>
@@ -63,36 +68,6 @@ const FormList = () => {
       </Switch>
     </div>
   );
-
-  // Retrieve data from firestore on load
-  // useEffect(() => {
-  //   forms.get().then((qs) => {
-  //     let newList = [formList];
-  //     qs.forEach((form) => {
-  //       // console.log(form.data());
-  //       newList.push(
-  //         <li key={form.id}>
-  //           <Link to={`${url}/${form.id}`}>Form {form.id}</Link>
-  //         </li>
-  //       );
-  //     });
-  //     setFormList(newList);
-  //   });
-  // }, []);
-
-  // return(
-  //   <div>
-  //     <Switch>
-  //       <Route path={`${path}/:formId`}>
-  //         <ViewForm />
-  //       </Route>
-  //       <Route path={path}>
-  //         <h3>Please select a form.</h3>
-  //         <ul>{formList}</ul>
-  //       </Route>
-  //     </Switch>
-  //   </div>
-  // );
 };
 
 export default FormList;

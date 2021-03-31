@@ -5,12 +5,10 @@ const ViewForm = () => {
   const location = useLocation();
   const data = location.state.data;
 
-  // console.log(data)
-
   return (
     <div>
       <h3>Form ID: {data.id}</h3>
-      <h4>Name: {data.first} {data.last} </h4>
+      <h4>Name: {data.name}</h4>
       <h4>Date: {data.date}</h4>
       <h4>Pain: {data.pain}</h4>
       <h4>Treatment Requested? {data.treatment ? 'Yes' : 'No'}</h4>
